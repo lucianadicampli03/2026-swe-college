@@ -1,0 +1,43 @@
+name: Get Jobs and Update Tables
+
+on:
+  schedule:
+    - cron: '0 12 * * *'
+  workflow_dispatch:
+
+jobs:
+  get-jobs:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+
+      - name: Install dependencies
+        run: bun install
+        working-directory: .github/scripts
+
+      - name: Get Jobs and Update Tables
+        run: bun run get-jobs
+        working-directory: .github/scripts
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+          APPLY_IMG_URL: ${{ secrets.APPLY_IMG_URL }}
+
+      - name: Commit Markdown changes
+        if: success()
+        run: |
+          git config --local user.name ${{ secrets.GIT_USER_NAME }}
+          git config --local user.email ${{ secrets.GIT_USER_EMAIL }}
+          git add README.md INTERN_INTL.md NEW_GRAD_USA.md NEW_GRAD_INTL.md
+          git diff --staged --exit-code || git commit -m "chore: update tables"
+
+      - name: Push changes
+        if: success()
+        uses: ad-m/github-push-action@v0.8.0
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ github.ref }}

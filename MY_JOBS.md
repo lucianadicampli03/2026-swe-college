@@ -4,7 +4,7 @@
 
 Data source: **Markdown tables in this repo** (`README.md`, `NEW_GRAD_USA.md`, `INTERN_INTL.md`, `NEW_GRAD_INTL.md`) — no API keys. Refresh lists by merging the latest changes from upstream, then re-run this script.
 
-**110** listings (deduped by posting URL). _Generated: 2026-05-21._
+**110** listings (deduped by posting URL). _Generated: 2026-05-22._
 
 | Type | Area | Company | Position | Location | Posting | Age |
 |---|---|---|---|---|---|---|
